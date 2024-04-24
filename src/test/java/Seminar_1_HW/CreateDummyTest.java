@@ -3,8 +3,15 @@ package Seminar_1_HW;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 public class CreateDummyTest extends GBAbstractTest {
 
@@ -37,5 +44,12 @@ public class CreateDummyTest extends GBAbstractTest {
 
         WebElement resultList = driver.findElement(By.xpath("//*[@class='mdc-data-table__cell']"));
         Assertions.assertEquals("Dummy_" + currentTimeMillis, resultList.getText());
+
+        File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        try{
+            FileUtils.copyFile(screenshot, new File("src/test/resources/screenshot_" + currentTimeMillis + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
