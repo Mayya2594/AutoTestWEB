@@ -2,6 +2,7 @@ package Seminar_1_HW;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -16,8 +17,8 @@ public abstract class GBAbstractTest {
     static String USERNAME = "GB202311d63244";
     static String PASSWORD = "3c81458174";
 
-    @BeforeAll
-    static void init() throws InterruptedException {
+    @BeforeEach
+    void init() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized"); //открыть браузер на весь экран
         options.addArguments("--incognito");
