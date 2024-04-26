@@ -1,15 +1,12 @@
-package Seminar_2_HW;
+package Seminar_3_HW;
 
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class GBStandTest {
 
     private WebDriver driver;
-    private WebDriverWait wait;
     private LoginPage loginPage;
     private MainPage mainPage;
 
@@ -26,14 +22,9 @@ public class GBStandTest {
 
     @BeforeEach
     public void setupTest() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized"); //открыть браузер на весь экран
-        options.addArguments("--incognito"); //открыть браузер в режиме инкогнито
-        driver = new ChromeDriver(options);
-        driver.get("https://test-stand.gb.ru/login");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        loginPage = new LoginPage(driver, wait);
+        Selenide.open("https://test-stand.gb.ru/login");
+        driver = WebDriverRunner.getWebDriver();
+        loginPage = Selenide.page(LoginPage.class);
     }
 
     @Test
@@ -88,14 +79,25 @@ public class GBStandTest {
         assertEquals("active", mainPage.getStatusOfStudentWithName(firstGeneratedStudentName));
     }
 
+    @Test
+    public void testNameInProfile() {
+        checkLogin();
+        mainPage.clickProfileButton();
+        ProfilePage profilePage = Selenide.page(ProfilePage.class);
+
+        String additionalInfoName = profilePage.getAdditionalInfoNameText();
+        String avatarName = profilePage.getAvatarNameText();
+        Assertions.assertEquals(additionalInfoName, avatarName);
+    }
+
     private void checkLogin() {
         loginPage.login(USERNAME, PASSWORD);
-        mainPage = new MainPage(driver, wait);
+        mainPage = Selenide.page(MainPage.class);
         assertTrue(mainPage.getUsernameLabelText().contains(USERNAME));
     }
 
     @AfterEach
-    public void teardown() {
-        driver.quit();
+    public void quit() {
+        WebDriverRunner.closeWebDriver();
     }
 }
