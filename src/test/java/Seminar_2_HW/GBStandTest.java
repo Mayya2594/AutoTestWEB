@@ -14,15 +14,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GBStandTest {
-
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private LoginPage loginPage;
-    private MainPage mainPage;
-
-    private static final String USERNAME = "MaximDav";
-    private static final String PASSWORD = "a188da4213";
+public class GBStandTest extends GBStandAbstractTest{
 
     @BeforeEach
     public void setupTest() {
@@ -88,14 +80,4 @@ public class GBStandTest {
         assertEquals("active", mainPage.getStatusOfStudentWithName(firstGeneratedStudentName));
     }
 
-    private void checkLogin() {
-        loginPage.login(USERNAME, PASSWORD);
-        mainPage = new MainPage(driver, wait);
-        assertTrue(mainPage.getUsernameLabelText().contains(USERNAME));
-    }
-
-    @AfterEach
-    public void teardown() {
-        driver.quit();
-    }
 }
